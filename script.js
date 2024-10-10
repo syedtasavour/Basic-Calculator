@@ -1,10 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const expression = document.getElementById('expression');
     const result = document.getElementById('result');
     const buttons = document.querySelectorAll('button');
 
-    let currentInput = '';
-    let currentOperator = '';
-    let previousInput = '';
+    let currentExpression = '';
 
     buttons.forEach(button => {
         button.addEventListener('click', () => {
@@ -16,9 +15,13 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (action === 'calculate') {
                 calculate();
             } else if (action === 'operator') {
-                handleOperator(value);
+                appendOperator(value);
             } else if (action === 'decimal') {
                 appendDecimal();
+            } else if (action === 'backspace') {
+                backspace();
+            } else if (action === 'negate') {
+                negate();
             } else {
                 appendNumber(value);
             }
@@ -28,64 +31,60 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function clear() {
-        currentInput = '';
-        currentOperator = '';
-        previousInput = '';
+        currentExpression = '';
+        result.value = '';
     }
 
     function calculate() {
-        if (currentInput && currentOperator && previousInput) {
-            const prev = parseFloat(previousInput);
-            const current = parseFloat(currentInput);
-
-            switch (currentOperator) {
-                case '+':
-                    currentInput = (prev + current).toString();
-                    break;
-                case '-':
-                    currentInput = (prev - current).toString();
-                    break;
-                case '*':
-                    currentInput = (prev * current).toString();
-                    break;
-                case '/':
-                    if (current === 0) {
-                        currentInput = 'Error';
-                    } else {
-                        currentInput = (prev / current).toString();
-                    }
-                    break;
+        try {
+            const calculatedResult = eval(currentExpression);
+            if (!isFinite(calculatedResult)) {
+                throw new Error('Invalid calculation');
             }
-
-            currentOperator = '';
-            previousInput = '';
+            result.value = Number(calculatedResult.toFixed(10)).toString().slice(0, 10);
+        } catch (error) {
+            result.value = 'Error';
         }
     }
 
-    function handleOperator(operator) {
-        if (currentInput) {
-            if (currentOperator && previousInput) {
-                calculate();
-            } else {
-                previousInput = currentInput;
-            }
-            currentOperator = operator;
-            currentInput = '';
+    function appendOperator(operator) {
+        if (currentExpression && !isNaN(currentExpression[currentExpression.length - 1])) {
+            currentExpression += operator;
         }
     }
 
     function appendDecimal() {
-        if (!currentInput.includes('.')) {
-            currentInput += '.';
+        const lastNumber = currentExpression.split(/[-+*/]/).pop();
+        if (!lastNumber.includes('.')) {
+            currentExpression += '.';
         }
     }
 
     function appendNumber(number) {
-        currentInput += number;
+        currentExpression += number;
+    }
+
+    function backspace() {
+        currentExpression = currentExpression.slice(0, -1);
+    }
+
+    function negate() {
+        if (currentExpression) {
+            if (currentExpression[0] === '-') {
+                currentExpression = currentExpression.slice(1);
+            } else {
+                currentExpression = '-' + currentExpression;
+            }
+        }
     }
 
     function updateDisplay() {
-        result.value = currentInput || '0';
+        expression.value = currentExpression;
+        if (currentExpression) {
+            calculate();
+        } else {
+            result.value = '';
+        }
     }
 
     // Keyboard support
@@ -96,11 +95,13 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (key === '.') {
             appendDecimal();
         } else if (['+', '-', '*', '/'].includes(key)) {
-            handleOperator(key);
+            appendOperator(key);
         } else if (key === 'Enter') {
             calculate();
         } else if (key === 'Escape') {
             clear();
+        } else if (key === 'Backspace') {
+            backspace();
         }
         updateDisplay();
     });
