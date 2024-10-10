@@ -1,6 +1,14 @@
-# Advanced Calculator
+# Basic Calculator
 
-This is an advanced calculator web application built using HTML, CSS, and JavaScript. It provides basic arithmetic operations, percentage calculations, and a user-friendly interface.
+[Live Demo](https://syedtasavour.github.io/Basic-Calculator/)
+
+## Project Clone
+
+```bash
+git clone https://github.com/syedtasavour/Basic-Calculator
+```
+
+This is a Basic calculator web application built using HTML, CSS, and JavaScript. It provides basic arithmetic operations, percentage calculations, and a user-friendly interface.
 
 ## Features
 
@@ -17,7 +25,7 @@ This is an advanced calculator web application built using HTML, CSS, and JavaSc
 
 ## How to Use
 
-1. Open the `index.html` file in a web browser.
+1. Open the `index.html` file in a web browser or visit the [live link](https://syedtasavour.github.io/Basic-Calculator/).
 2. Use the on-screen buttons to input numbers and perform calculations:
    - Click on number buttons (0-9) to input digits
    - Click on operator buttons (+, -, *, /, %) to select an operation
