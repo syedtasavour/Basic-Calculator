@@ -66,20 +66,3 @@ button:hover {
 
 .clear:hover {
     background-color: #ff5147;
-}
-
-.equals {
-    background-color: #0074d9;
-}
-
-.equals:hover {
-    background-color: #0088ff;
-}
-
-[data-action="operator"] {
-    background-color: #ff851b;
-}
-
-[data-action="operator"]:hover {
-    background-color: #ff9b3b;
-}
